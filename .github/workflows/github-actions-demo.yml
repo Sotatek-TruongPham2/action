@@ -15,7 +15,7 @@ jobs:
                   buildkitd-flags: --debug
             - run: |
                   docker ps -a \
-                  docker --version
+                  docker --version \
 
             - name: Build
               uses: docker/build-push-action@v5
