@@ -93,8 +93,6 @@ function main {
     show_build_message
     set_list_addons
     update_config_file
-    # start_containers
-    # wait_until_odoo_shutdown
 }
 
 main "$@"

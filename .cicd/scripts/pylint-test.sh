@@ -8,7 +8,6 @@ function analyze_log {
     # no need to analyze anything
     result="empty"
 }
-# fixme: uncomment wait_... and remove sleep
-sleep 15
-# wait_until_odoo_shutdown
+
+wait_until_odoo_shutdown
 analyze_log

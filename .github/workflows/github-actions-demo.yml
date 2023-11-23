@@ -1,7 +1,8 @@
 name: ci
 
 on:
-    push:
+    pull_request:
+        types: [reopened, opened, synchronize, ready_for_review]
 
 env:
     CICD_ODOO_OPTIONS: ${{ github.workspace }}/.cicd/conf/odoo.conf
@@ -18,7 +19,7 @@ env:
     ODOO_TMP_BACKUP_FOLDER: ${{ github.workspace }}/.cicd/.tmp/server-backup
 
 jobs:
-    buildx:
+    Run-Pylint-Test:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -39,5 +40,11 @@ jobs:
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
                   cd $ODOO_DOCKER_COMPOSE_PATH && docker compose logs -n 1000
             - run: |
-                  bash $PIPELINE_UTILS_SCRIPT_PATH exec send_file_telegram ${{ secrets.TELEGRAM_TOKEN }} ${{ secrets.TELEGRAM_CHANNEL_ID }} "$LOG_FILE_OUTSIDE" "you"
-                  bash $PIPELINE_UTILS_SCRIPT_PATH exec send_message_telegram ${{ secrets.TELEGRAM_TOKEN }} ${{ secrets.TELEGRAM_CHANNEL_ID }} "just message"
+                  bash $PIPELINE_UTILS_SCRIPT_PATH exec send_file_telegram ${{ secrets.TELEGRAM_TOKEN }} ${{ secrets.TELEGRAM_CHANNEL_ID }} "$LOG_FILE_OUTSIDE" "The pylint test result for [PR \\#${{ github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})"
+
+    Deploy-server:
+        runs-on: ubuntu-latest
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        steps:
+            - run: |
+                  echo "ok deploy me bro"
