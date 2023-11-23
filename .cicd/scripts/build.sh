@@ -44,10 +44,8 @@ function update_config_file {
     test_tags=
 
     echo -en "\ncommand = \
-    --stop-after-init \
     --workers 0 \
     --database $ODOO_TEST_DATABASE_NAME \
-    --logfile "$LOG_FILE" \
     --log-level info " >>$CONFIG_FILE
 
     if [[ -n $test_pylint ]]; then
