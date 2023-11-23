@@ -33,7 +33,8 @@ jobs:
                   compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
                   up-flags: "--build"
                   down-flags: "--volumes"
-            - run: |
+            - name: Run Pylint Test cases
+              run: |
                   tree -d .
                   ls -lah .
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
