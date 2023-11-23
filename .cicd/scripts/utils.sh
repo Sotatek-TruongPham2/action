@@ -100,7 +100,6 @@ function get_list_addons_ignored_test {
 }
 
 function wait_until_odoo_shutdown {
-    echo "f**************************************"
     # because we put --stop-after-init option to odoo command
     # so after Odoo has finished installing and runing test cases
     # It will shutdown automatically
