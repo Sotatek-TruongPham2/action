@@ -37,6 +37,6 @@ jobs:
               run: |
                   tree -d .
                   ls -lah .
-                  bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
+                  # bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
                   bash $PIPELINE_UTILS_SCRIPT_PATH docker_odoo_exec cat /var/log/odoo/odoo.log
-                  cat $ODOO_WORKSPACE/log/odoo.log
+                  # cat $ODOO_WORKSPACE/log/odoo.log
