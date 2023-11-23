@@ -30,7 +30,7 @@ jobs:
             - uses: isbang/compose-action@v1.5.1
               with:
                   compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
-                  up-flags: "--build --quiet"
+                  up-flags: "--build --quiet-pull"
                   down-flags: "--volumes"
             - name: Run Pylint Test cases
               run: |
