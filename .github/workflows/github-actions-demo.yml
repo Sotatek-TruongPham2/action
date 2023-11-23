@@ -4,18 +4,18 @@ on:
     push:
 
 env:
-    CICD_ODOO_OPTIONS: $GITHUB_WORKSPACE/.cicd/conf/odoo.conf
+    CICD_ODOO_OPTIONS: ${{ github.workspace }}/conf/odoo.conf
     ODOO_CUSTOM_ADDONS_PATH: .
-    PIPELINE_SCRIPTS_PATH: ./.cicd/scripts
-    PIPELINE_UTILS_SCRIPT_PATH: ./.cicd/scripts/utils.sh
-    ODOO_IMAGE_TAG: "xmars/odoo16-cicd"
-    ODOO_WORKSPACE: ./.cicd/odoo
-    CONFIG_FILE: ./.cicd/odoo/etc/odoo.conf
-    ODOO_DOCKER_COMPOSE_PATH: ./.cicd/odoo
+    PIPELINE_SCRIPTS_PATH: ${{ github.workspace }}/scripts
+    PIPELINE_UTILS_SCRIPT_PATH: ${{ github.workspace }}/scripts/utils.sh
+    ODOO_IMAGE_TAG: xmars/odoo16-cicd
+    ODOO_WORKSPACE: ${{ github.workspace }}/odoo
+    CONFIG_FILE: ${{ github.workspace }}/odoo/etc/odoo.conf
+    ODOO_DOCKER_COMPOSE_PATH: ${{ github.workspace }}/odoo
     ODOO_TEST_DATABASE_NAME: testing_db
     LOG_FILE: /var/log/odoo/odoo.log
-    LOG_FILE_OUTSIDE: ./.cicd/odoo/logs/odoo.log
-    ODOO_TMP_BACKUP_FOLDER: ./.cicd/.tmp/server-backup
+    LOG_FILE_OUTSIDE: ${{ github.workspace }}/odoo/logs/odoo.log
+    ODOO_TMP_BACKUP_FOLDER: ${{ github.workspace }}/.tmp/server-backup
 
 jobs:
     buildx:
@@ -27,12 +27,12 @@ jobs:
               run: |
                   echo $CICD_ODOO_OPTIONS
                   bash $PIPELINE_SCRIPTS_PATH/build.sh "pylint"
-            # - uses: isbang/compose-action@v1.5.1
-            #   with:
-            #       compose-file: ./.cicd/odoo/docker-compose.yml
-            #       up-flags: "--build"
-            #       down-flags: "--volumes"
-            # - run: |
-            #       ls -lah .
-            #       bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
-            #       cat $ODOO_WORKSPACE/log/odoo.log
+            - uses: isbang/compose-action@v1.5.1
+              with:
+                  compose-file: ${{ github.workspace }}/odoo/docker-compose.yml
+                  up-flags: "--build"
+                  down-flags: "--volumes"
+            - run: |
+                  ls -lah .
+                  bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
+                  cat $ODOO_WORKSPACE/log/odoo.log
