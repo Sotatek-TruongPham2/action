@@ -35,11 +35,8 @@ jobs:
                   down-flags: "--volumes"
             - name: Run Pylint Test cases
               run: |
-                  tree -d $ODOO_WORKSPACE
-                  ls -lah 
+                  find $ODOO_WORKSPACE
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
-            - run: |
-                  bash $PIPELINE_UTILS_SCRIPT_PATH exec get_repo_url
             - run: |
                   docker ps -a
                   bash $PIPELINE_UTILS_SCRIPT_PATH exec docker_odoo_exec cat /var/log/odoo/odoo.log
