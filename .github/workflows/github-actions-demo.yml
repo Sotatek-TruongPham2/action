@@ -2,7 +2,7 @@ name: ci
 
 on:
     pull_request:
-        types: [reopened, opened, synchronize, ready_for_review]
+        types: [reopened, opened, synchronize, ready_for_review, closed]
 
 env:
     CICD_ODOO_OPTIONS: ${{ github.workspace }}/.cicd/conf/odoo.conf
