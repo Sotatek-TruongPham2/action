@@ -37,7 +37,7 @@ jobs:
               run: |
                   find $ODOO_WORKSPACE
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
-                  docker compose logs -f
+                  cd $ODOO_DOCKER_COMPOSE_PATH && docker compose logs -f
             - run: |
                   docker ps -a
                   bash $PIPELINE_UTILS_SCRIPT_PATH exec docker_odoo_exec cat /var/log/odoo/odoo.log
