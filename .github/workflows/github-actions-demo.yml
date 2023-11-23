@@ -25,24 +25,10 @@ jobs:
               uses: actions/checkout@v4
             - name: Update config before run pylint
               run: |
-                  echo $CICD_ODOO_OPTIONS
-                  echo $ODOO_CUSTOM_ADDONS_PATH
-                  echo $PIPELINE_SCRIPTS_PATH
-                  echo $PIPELINE_UTILS_SCRIPT_PATH
-                  echo $ODOO_IMAGE_TAG
-                  echo $ODOO_WORKSPACE
-                  echo $CONFIG_FILE
-                  echo $ODOO_DOCKER_COMPOSE_PATH
-                  echo $ODOO_TEST_DATABASE_NAME
-                  echo $LOG_FILE
-                  echo $LOG_FILE_OUTSIDE
-                  echo $ODOO_TMP_BACKUP_FOLDER
-
                   bash $PIPELINE_SCRIPTS_PATH/build.sh "pylint"
-                  cat $CONFIG_FILE
             - uses: isbang/compose-action@v1.5.1
               with:
-                  compose-file: "$ODOO_WORKSPACE/docker-compose.yml"
+                  compose-file: ${ODOO_WORKSPACE}/docker-compose.yml
                   up-flags: "--build"
                   down-flags: "--volumes"
 
