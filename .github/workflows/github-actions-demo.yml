@@ -4,8 +4,19 @@ on:
     push:
 
 env:
-    CONFIG_FILE: ./.cicd/odoo/etc/odoo.conf
+    CICD_PATH: WORKSPACE}/.cicd
     ODOO_CUSTOM_ADDONS_PATH: .
+    PIPELINE_SCRIPTS_PATH: "./.cicd/jenkins/scripts"
+    PIPELINE_UTILS_SCRIPT_PATH: "${PIPELINE_SCRIPTS_PATH}/utils.sh"
+    ODOO_IMAGE_TAG: "xmars/odoo16-cicd"
+    ODOO_WORKSPACE: "./.cicd/odoo"
+    CONFIG_FILE: ${ODOO_WORKSPACE}/etc/odoo.conf
+    ODOO_DOCKER_COMPOSE_PATH: "${ODOO_WORKSPACE}"
+    ODOO_TEST_DATABASE_NAME: "testing_db"
+    LOG_FILE: "/var/log/odoo/odoo.log"
+    LOG_FILE_OUTSIDE: ${ODOO_WORKSPACE}/logs/odoo.log
+    ODOO_TMP_BACKUP_FOLDER: WORKSPACE}/.tmp/server-backup
+
 jobs:
     buildx:
         runs-on: ubuntu-latest
@@ -14,11 +25,11 @@ jobs:
               uses: actions/checkout@v4
             - name: Update config before run pylint
               run: |
-                  bash ./.cicd/scripts/build.sh "pylint"
+                  bash $PIPELINE_SCRIPTS_PATH/build.sh "pylint"
                   cat $CONFIG_FILE
             - uses: isbang/compose-action@v1.5.1
               with:
-                  compose-file: "./.cicd/odoo/docker-compose.yml"
+                  compose-file: "$ODOO_WORKSPACE/docker-compose.yml"
                   up-flags: "--build"
                   down-flags: "--volumes"
 
