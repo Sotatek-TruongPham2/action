@@ -27,12 +27,13 @@ jobs:
               run: |
                   echo $CICD_ODOO_OPTIONS
                   bash $PIPELINE_SCRIPTS_PATH/build.sh "pylint"
-            # - uses: isbang/compose-action@v1.5.1
-            #   with:
-            #       compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
-            #       up-flags: "--build"
-            #       down-flags: "--volumes"
-            # - run: |
-            #       ls -lah .
-            #       bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
-            #       cat $ODOO_WORKSPACE/log/odoo.log
+                  cat $CONFIG_FILE
+            - uses: isbang/compose-action@v1.5.1
+              with:
+                  compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
+                  up-flags: "--build"
+                  down-flags: "--volumes"
+            - run: |
+                  ls -lah .
+                  bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
+                  cat $ODOO_WORKSPACE/log/odoo.log
