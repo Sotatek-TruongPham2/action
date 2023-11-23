@@ -19,7 +19,7 @@ env:
     ODOO_TMP_BACKUP_FOLDER: ${{ github.workspace }}/.cicd/.tmp/server-backup
 
 jobs:
-    Run-Pylint-Test:
+    pylint-test:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -40,6 +40,7 @@ jobs:
     Deploy-server:
         runs-on: ubuntu-latest
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        needs: [pylint-test]
         steps:
             - run: |
                   echo "ok deploy me bro"
