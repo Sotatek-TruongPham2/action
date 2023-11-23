@@ -26,20 +26,15 @@ jobs:
               uses: actions/checkout@v4
             - name: Update config before run pylint
               run: |
-                  echo $CICD_ODOO_OPTIONS
                   bash $PIPELINE_SCRIPTS_PATH/build.sh "pylint"
-                  cat $CONFIG_FILE
             - uses: isbang/compose-action@v1.5.1
               with:
                   compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
-                  up-flags: "--build"
+                  up-flags: "--build --quiet"
                   down-flags: "--volumes"
             - name: Run Pylint Test cases
               run: |
-                  find $ODOO_WORKSPACE
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
-                  cd $ODOO_DOCKER_COMPOSE_PATH && docker compose logs -n 1000
-            - run: |
                   bash $PIPELINE_UTILS_SCRIPT_PATH exec send_file_telegram ${{ secrets.TELEGRAM_TOKEN }} ${{ secrets.TELEGRAM_CHANNEL_ID }} "$LOG_FILE_OUTSIDE" "The pylint test result for [PR \\#${{ github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})"
 
     Deploy-server:
