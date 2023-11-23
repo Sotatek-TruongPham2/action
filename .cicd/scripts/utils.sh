@@ -137,6 +137,9 @@ get_odoo_container_id() {
 
 docker_odoo_exec() {
     odoo_container_id=$(get_odoo_container_id)
+    # fixme
+    echo "come here"
+    echo $odoo_container_id
     docker exec $odoo_container_id sh -c "$@"
 }
 
