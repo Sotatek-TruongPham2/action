@@ -46,12 +46,13 @@ function update_config_file {
     echo -en "\ncommand = \
     --workers 0 \
     --database $ODOO_TEST_DATABASE_NAME \
+    --logfile "$LOG_FILE" \
     --log-level info " >>$CONFIG_FILE
 
     if [[ -n $test_pylint ]]; then
         test_tags="/test_lint,/test_pylint,/test_lint,/test_pylint,-/test_lint:TestPyLint.test_pylint"
         echo -en " --load base,web \
-        --init test_lint,test_pylint,pos_discount_all \
+        --init test_lint,test_pylint \
         --test-tags "$test_tags"\n" >>$CONFIG_FILE
     else
         tagged_custom_addons=$(echo $custom_addons | sed "s/,/,\//g" | sed "s/^/\//")
