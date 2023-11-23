@@ -40,5 +40,4 @@ jobs:
                   cd $ODOO_DOCKER_COMPOSE_PATH && docker compose logs -n 1000
             - run: |
                   docker ps -a
-                  bash $PIPELINE_UTILS_SCRIPT_PATH exec docker_odoo_exec cat /var/log/odoo/odoo.log
                   cat $LOG_FILE_OUTSIDE
