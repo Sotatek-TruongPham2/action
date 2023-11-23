@@ -43,8 +43,8 @@ function update_config_file {
 
     test_tags=
 
+    # fixme: add  --stop-after-init \
     echo -en "\ncommand = \
-    --stop-after-init \
     --workers 0 \
     --database $ODOO_TEST_DATABASE_NAME \
     --logfile "$LOG_FILE" \
