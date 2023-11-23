@@ -37,8 +37,8 @@ jobs:
               run: |
                   tree -d .
                   ls -lah .
-                  # bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
-                  bash ${{ github.workspace }}/.cicd/scripts/utils.sh get_repo_url
-                  bash $PIPELINE_UTILS_SCRIPT_PATH docker_odoo_exec cat /var/log/odoo/odoo.log
-                  docker ps -a
-                  # cat $ODOO_WORKSPACE/log/odoo.log
+                  bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
+            - run: echo $(bash ${{ github.workspace }}/.cicd/scripts/utils.sh get_repo_url)
+            - run: bash $PIPELINE_UTILS_SCRIPT_PATH docker_odoo_exec cat /var/log/odoo/odoo.log
+            - run: docker ps -a
+              # cat $ODOO_WORKSPACE/log/odoo.log
