@@ -115,6 +115,7 @@ function wait_until_odoo_shutdown {
     total_waited_time=0
     # fixme: remove lines
     echo $odoo_container_id
+    printf $odoo_container_id
     ls -lah .
     # fixme
     while (($total_waited_time <= $maximum_waiting_time)); do
