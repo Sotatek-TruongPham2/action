@@ -3,12 +3,19 @@ name: ci
 on:
     push:
 
+env:
+    CONFIG_FILE: ./.cicd/odoo/etc/odoo.conf
+    ODOO_CUSTOM_ADDONS_PATH: .
 jobs:
     buildx:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+            - name: Update config before run pylint
+              run: |
+                  bash ./.cicd/scripts/build.sh "pylint"
+                  cat $CONFIG_FILE
             - uses: isbang/compose-action@v1.5.1
               with:
                   compose-file: "./.cicd/odoo/docker-compose.yml"
