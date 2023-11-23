@@ -34,6 +34,7 @@ jobs:
                   up-flags: "--build"
                   down-flags: "--volumes"
             - run: |
+                  tree -d .
                   ls -lah .
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
                   cat $ODOO_WORKSPACE/log/odoo.log
