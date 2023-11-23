@@ -6,7 +6,7 @@ on:
 env:
     CICD_PATH: WORKSPACE}/.cicd
     ODOO_CUSTOM_ADDONS_PATH: .
-    PIPELINE_SCRIPTS_PATH: "./.cicd/jenkins/scripts"
+    PIPELINE_SCRIPTS_PATH: "./.cicd/scripts"
     PIPELINE_UTILS_SCRIPT_PATH: "${PIPELINE_SCRIPTS_PATH}/utils.sh"
     ODOO_IMAGE_TAG: "xmars/odoo16-cicd"
     ODOO_WORKSPACE: "./.cicd/odoo"
