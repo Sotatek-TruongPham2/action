@@ -41,3 +41,6 @@ jobs:
             - run: |
                   docker ps -a
                   cat $LOG_FILE_OUTSIDE
+                  bash $PIPELINE_UTILS_SCRIPT_PATH exec send_file_telegram_default ${{ secrets.TELEGRAM_TOKEN }} ${{ secrets.TELEGRAM_CHANNEL_ID }} "$LOG_FILE_OUTSIDE" "you"
+                  bash $PIPELINE_UTILS_SCRIPT_PATH exec send_message_telegram_default ${{ secrets.TELEGRAM_TOKEN }} ${{ secrets.TELEGRAM_CHANNEL_ID }} "just message"
+                  bash $PIPELINE_SCRIPTS_PATH
