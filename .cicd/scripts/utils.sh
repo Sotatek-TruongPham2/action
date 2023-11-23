@@ -13,7 +13,7 @@ get_cicd_config_for_odoo_addon() {
 
 docker_compose() {
     cd $ODOO_DOCKER_COMPOSE_PATH
-    docker compose -p "$@"
+    docker compose "$@"
 }
 
 docker_compose_clean() {
