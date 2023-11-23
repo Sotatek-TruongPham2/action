@@ -8,5 +8,5 @@ function analyze_log {
     # no need to analyze anything
     result="empty"
 }
-
+wait_until_odoo_shutdown
 analyze_log
