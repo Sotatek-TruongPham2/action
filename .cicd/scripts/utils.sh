@@ -3,7 +3,7 @@
 global_github_access_token=${github_access_token}
 global_telegram_bot_token=${telegram_bot_token}
 global_telegram_channel_id=${telegram_channel_id}
-config_path="$CICD_PATH/conf/odoo.json"
+config_path=${CICD_ODOO_OPTIONS}
 
 get_cicd_config_for_odoo_addon() {
     addon_name=$1

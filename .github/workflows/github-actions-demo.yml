@@ -4,18 +4,18 @@ on:
     push:
 
 env:
-    CICD_PATH: WORKSPACE}/.cicd
+    CICD_ODOO_OPTIONS: ./.cicd/conf/odoo.conf
     ODOO_CUSTOM_ADDONS_PATH: .
-    PIPELINE_SCRIPTS_PATH: "./.cicd/scripts"
-    PIPELINE_UTILS_SCRIPT_PATH: "${PIPELINE_SCRIPTS_PATH}/utils.sh"
+    PIPELINE_SCRIPTS_PATH: ./.cicd/scripts
+    PIPELINE_UTILS_SCRIPT_PATH: ./.cicd/scripts/utils.sh
     ODOO_IMAGE_TAG: "xmars/odoo16-cicd"
-    ODOO_WORKSPACE: "./.cicd/odoo"
-    CONFIG_FILE: ${ODOO_WORKSPACE}/etc/odoo.conf
-    ODOO_DOCKER_COMPOSE_PATH: "${ODOO_WORKSPACE}"
-    ODOO_TEST_DATABASE_NAME: "testing_db"
-    LOG_FILE: "/var/log/odoo/odoo.log"
-    LOG_FILE_OUTSIDE: ${ODOO_WORKSPACE}/logs/odoo.log
-    ODOO_TMP_BACKUP_FOLDER: WORKSPACE}/.tmp/server-backup
+    ODOO_WORKSPACE: ./.cicd/odoo
+    CONFIG_FILE: ./.cicd/odoo/etc/odoo.conf
+    ODOO_DOCKER_COMPOSE_PATH: "./.cicd/odoo"
+    ODOO_TEST_DATABASE_NAME: testing_db
+    LOG_FILE: /var/log/odoo/odoo.log
+    LOG_FILE_OUTSIDE: ./.cicd/odoo/logs/odoo.log
+    ODOO_TMP_BACKUP_FOLDER: ./.cicd/.tmp/server-backup
 
 jobs:
     buildx:
@@ -25,7 +25,7 @@ jobs:
               uses: actions/checkout@v4
             - name: Update config before run pylint
               run: |
-                  echo $CICD_PATH
+                  echo $CICD_ODOO_OPTIONS
                   echo $ODOO_CUSTOM_ADDONS_PATH
                   echo $PIPELINE_SCRIPTS_PATH
                   echo $PIPELINE_UTILS_SCRIPT_PATH
