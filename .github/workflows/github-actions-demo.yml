@@ -11,7 +11,7 @@ env:
     ODOO_IMAGE_TAG: "xmars/odoo16-cicd"
     ODOO_WORKSPACE: ./.cicd/odoo
     CONFIG_FILE: ./.cicd/odoo/etc/odoo.conf
-    ODOO_DOCKER_COMPOSE_PATH: "./.cicd/odoo"
+    ODOO_DOCKER_COMPOSE_PATH: ./.cicd/odoo
     ODOO_TEST_DATABASE_NAME: testing_db
     LOG_FILE: /var/log/odoo/odoo.log
     LOG_FILE_OUTSIDE: ./.cicd/odoo/logs/odoo.log
@@ -32,6 +32,7 @@ jobs:
                   up-flags: "--build"
                   down-flags: "--volumes"
             - run: |
+                  ls -lah .
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
                   cat $ODOO_WORKSPACE/log/odoo.log
 
