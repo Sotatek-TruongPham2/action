@@ -94,8 +94,8 @@ jobs:
     # TODO: integrationtest and deploy server
     integration-test:
         runs-on: ubuntu-latest
-        if: github.event.action == 'closed' && github.event.pull_request.merged == true
         #fixme: uncomment needs
+        # if: github.event.action == 'closed' && github.event.pull_request.merged == true
         # needs: [pylint-test, unit-test-at-install, unit-test-post-install]
         steps:
             - name: "Integration test"
