@@ -100,18 +100,17 @@ jobs:
         # if: github.event.action == 'closed' && github.event.pull_request.merged == true
         # needs: [pylint-test, unit-test-at-install, unit-test-post-install]
         steps:
-            # - name: "Copy backup script file"
-            #   uses: appleboy/scp-action@v0.1.4
-            #   with:
-            #       host: ${{ env.SERVER_HOST }}
-            #       username: ${{ env.SERVER_USER }}
-            #       password: ${{ env.SERVER_PASSWORD }}
-            #       port: ${{ env.SERVER_PORT }}
-            #       timeout: 5m
-            #       #   source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
-            #       source: ${{ github.workspace }}/.cicd/scripts/server-backup.sh
-            #       target: /tmp/
-            #       #   target: ${{ env.SERVER_BACKUP_SCRIPT }}
+            - name: "Copy backup script file"
+              uses: appleboy/scp-action@v0.1.4
+              with:
+                  host: ${{ env.SERVER_HOST }}
+                  username: ${{ env.SERVER_USER }}
+                  password: ${{ env.SERVER_PASSWORD }}
+                  port: ${{ env.SERVER_PORT }}
+                  #   source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
+                  source: ${{ github.workspace }}/.cicd/scripts/server-backup.sh
+                  target: /home/hungtx/test_git
+                  #   target: ${{ env.SERVER_BACKUP_SCRIPT }}
 
             - name: "Integration test"
               uses: appleboy/ssh-action@v1.0.0
