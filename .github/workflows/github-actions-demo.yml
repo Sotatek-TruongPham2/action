@@ -110,8 +110,8 @@ jobs:
                   password: ${{ env.SERVER_PASSWORD }}
                   port: ${{ env.SERVER_PORT }}
                   #   source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
-                  source: ${{ github.workspace }}/.cicd/scripts/server-backup.sh
-                  target: /home/hungtx/test_git
+                  source: "${{ github.workspace }}/.cicd/scripts/server-backup.sh"
+                  target: "/tmp"
                   #   target: ${{ env.SERVER_BACKUP_SCRIPT }}
 
             - name: "Integration test"
