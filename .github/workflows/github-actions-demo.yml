@@ -82,4 +82,4 @@ jobs:
         needs: [pylint-test, unit-test-at-install, unit-test-post-install]
         steps:
             - run: |
-                  echo "ok deploy me bro"
+                  echo "Deploy to server here"

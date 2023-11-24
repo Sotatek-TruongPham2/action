@@ -8,7 +8,6 @@
     "calculated from the difference between a sale with default pricelist",
     "version": "16.0.1.0.1",
     "category": "Point of Sale",
-    "maintainers": ["legalsylvain"],
     "author": "GRAP,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/pos",
     "license": "AGPL-3",
