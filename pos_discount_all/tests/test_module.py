@@ -42,7 +42,7 @@ class TestUi(TestPointOfSaleHttpCommon):
                 "name": "Generic Product",
                 "available_in_pos": True,
                 "list_price": 10.0,
-                "taxes_id": False,
+                "taxes_id12": False,
             }
         )
 
