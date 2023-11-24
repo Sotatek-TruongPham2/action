@@ -17,6 +17,7 @@ env:
     LOG_FILE: /var/log/odoo/odoo.log
     LOG_FILE_OUTSIDE: ${{ github.workspace }}/.cicd/odoo/logs/odoo.log
     ODOO_TMP_BACKUP_FOLDER: ${{ github.workspace }}/.cicd/.tmp/server-backup
+    TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
 
 jobs:
     pylint-test:
@@ -24,7 +25,7 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: Update config before run pylint
+            - name: Update config file before running pylint tests
               run: |
                   bash $PIPELINE_SCRIPTS_PATH/build.sh "pylint"
             - uses: isbang/compose-action@v1.5.1
@@ -34,8 +35,26 @@ jobs:
                   down-flags: "--volumes"
             - name: Run Pylint Test cases
               run: |
+                  echo $TELEGRAM_CHANNEL_ID
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
                   bash $PIPELINE_UTILS_SCRIPT_PATH exec send_file_telegram ${{ secrets.TELEGRAM_TOKEN }} ${{ secrets.TELEGRAM_CHANNEL_ID }} "$LOG_FILE_OUTSIDE" "The pylint test result for [PR \\#${{ github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})"
+
+    unit-test-at-install:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Update config file before running unit tests
+              run: |
+                  bash $PIPELINE_SCRIPTS_PATH/build.sh "unit_test" "at_test"
+            - uses: isbang/compose-action@v1.5.1
+              with:
+                  compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
+                  up-flags: "--build --quiet-pull"
+                  down-flags: "--volumes"
+            # - name: Run Unit test cases
+            #   run: |
+            #       bash $PIPELINE_SCRIPTS_PATH/unit-test.sh
 
     Deploy-server:
         runs-on: ubuntu-latest
