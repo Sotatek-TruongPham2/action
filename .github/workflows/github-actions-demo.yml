@@ -25,9 +25,9 @@ env:
     PR_NUMBER: ${{ github.event.pull_request.number }}
     PR_URL: ${{ github.event.pull_request.html_url }}
 
-    SERVER_HOST: ${{ secrets.SERVER_HOST }}
-    SERVER_USER: ${{ secrets.SERVER_USER }}
-    SERVER_PORT: ${{ secrets.SERVER_PORT }}
+    SERVER_HOST: ${{ vars.SERVER_HOST }}
+    SERVER_USER: ${{ vars.SERVER_USER }}
+    SERVER_PORT: ${{ vars.SERVER_PORT }}
     SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
     SERVER_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
 
