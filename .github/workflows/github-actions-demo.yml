@@ -105,7 +105,6 @@ jobs:
                   username: ${{ env.SERVER_USER }}
                   password: ${{ env.SERVER_PASSWORD }}
                   port: ${{ env.SERVER_PORT }}
-                  debug: true
                   script: |
                       docker ps -a
 
