@@ -106,7 +106,6 @@ jobs:
                   password: ${{ env.SERVER_PASSWORD }}
                   port: ${{ env.SERVER_PORT }}
                   script: |
-                      ls -lah /
                       docker ps -a
 
     # deploy-server:
