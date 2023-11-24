@@ -110,16 +110,16 @@ jobs:
                   source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
                   target: ${{ env.SERVER_BACKUP_SCRIPT }}
 
-            - name: "Integration test"
-              uses: appleboy/ssh-action@v1.0.0
-              with:
-                  host: ${{ env.SERVER_HOST }}
-                  username: ${{ env.SERVER_USER }}
-                  password: ${{ env.SERVER_PASSWORD }}
-                  port: ${{ env.SERVER_PORT }}
-                  script: |
-                      docker ps -a
-                      find . /tmp
+            # - name: "Integration test"
+            #   uses: appleboy/ssh-action@v1.0.0
+            #   with:
+            #       host: ${{ env.SERVER_HOST }}
+            #       username: ${{ env.SERVER_USER }}
+            #       password: ${{ env.SERVER_PASSWORD }}
+            #       port: ${{ env.SERVER_PORT }}
+            #       script: |
+            #           docker ps -a
+            #           find . /tmp
 
     # deploy-server:
     #     runs-on: ubuntu-latest
