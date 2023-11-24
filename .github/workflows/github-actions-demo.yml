@@ -108,7 +108,8 @@ jobs:
                   password: ${{ env.SERVER_PASSWORD }}
                   port: ${{ env.SERVER_PORT }}
                   timeout: 5m
-                  source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
+                  #   source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
+                  source: ${{ github.workspace }}/.cicd/scripts/server-backup.sh
                   target: /tmp/odoo-cicd/server-backup
                   #   target: ${{ env.SERVER_BACKUP_SCRIPT }}
 
