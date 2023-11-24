@@ -28,9 +28,7 @@ function set_list_addons {
 
     ignore_demo_data_addons=$(get_list_addons_ignore_demo_data "$ODOO_CUSTOM_ADDONS_PATH")
     declare -g without_demo_addons=
-    if [[ -z $ignore_demo_data_addons ]]; then
-        without_demo_addons=all
-    else
+    if [[ -n $ignore_demo_data_addons ]]; then
         without_demo_addons=$ignore_demo_data_addons
     fi
 }
@@ -62,9 +60,15 @@ function update_config_file {
         else
             test_tags="${tagged_custom_addons}"
         fi
-        echo -en " --init ${custom_addons} \
-        --without-demo $without_demo_addons \
-        --test-tags $test_tags\n" >>$CONFIG_FILE
+        if [[ -z $without_demo_addons ]]; then
+            echo -en " --init ${custom_addons} \
+            --test-tags $test_tags\n" >>$CONFIG_FILE
+        else
+            echo -en " --init ${custom_addons} \
+            --without-demo $without_demo_addons \
+            --test-tags $test_tags\n" >>$CONFIG_FILE
+        fi
+
     fi
 }
 
