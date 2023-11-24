@@ -5,7 +5,7 @@ on:
         types: [reopened, opened, synchronize, ready_for_review, closed]
 
 env:
-    CICD_ODOO_OPTIONS: ${{ github.workspace }}/.cicd/conf/odoo.conf
+    CICD_ODOO_OPTIONS: ${{ github.workspace }}/.cicd/conf/odoo.json
     ODOO_CUSTOM_ADDONS_PATH: .
     PIPELINE_SCRIPTS_PATH: ${{ github.workspace }}/.cicd/scripts
     PIPELINE_UTILS_SCRIPT_PATH: ${{ github.workspace }}/.cicd/scripts/utils.sh
@@ -18,6 +18,9 @@ env:
     LOG_FILE_OUTSIDE: ${{ github.workspace }}/.cicd/odoo/logs/odoo.log
     ODOO_TMP_BACKUP_FOLDER: ${{ github.workspace }}/.cicd/.tmp/server-backup
     TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+    TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+    PR_URL: ${{ github.event.pull_request.html_url }}
 
 jobs:
     pylint-test:
@@ -35,9 +38,7 @@ jobs:
                   down-flags: "--volumes"
             - name: Run Pylint Test cases
               run: |
-                  echo $TELEGRAM_CHANNEL_ID
                   bash $PIPELINE_SCRIPTS_PATH/pylint-test.sh
-                  bash $PIPELINE_UTILS_SCRIPT_PATH exec send_file_telegram ${{ secrets.TELEGRAM_TOKEN }} ${{ secrets.TELEGRAM_CHANNEL_ID }} "$LOG_FILE_OUTSIDE" "The pylint test result for [PR \\#${{ github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})"
 
     unit-test-at-install:
         runs-on: ubuntu-latest
@@ -56,10 +57,24 @@ jobs:
             #   run: |
             #       bash $PIPELINE_SCRIPTS_PATH/unit-test.sh
 
+    unit-test-post-install:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Update config file before running unit tests
+              run: |
+                  bash $PIPELINE_SCRIPTS_PATH/build.sh "unit_test" "post_test"
+            - uses: isbang/compose-action@v1.5.1
+              with:
+                  compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
+                  up-flags: "--build --quiet-pull"
+                  down-flags: "--volumes"
+
     Deploy-server:
         runs-on: ubuntu-latest
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
-        needs: [pylint-test]
+        needs: [pylint-test, unit-test-at-install]
         steps:
             - run: |
                   echo "ok deploy me bro"
