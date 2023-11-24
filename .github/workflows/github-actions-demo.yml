@@ -12,6 +12,8 @@ env:
     ODOO_IMAGE_TAG: xmars/odoo16-cicd
     ODOO_WORKSPACE: ${{ github.workspace }}/.cicd/odoo
     CONFIG_FILE: ${{ github.workspace }}/.cicd/odoo/etc/odoo.conf
+    SOURCE_REQUIREMENTS_FILE: ${{ github.workspace }}/requirements.txt
+    DOCKER_REQUIREMENTS_FILE: ${{ github.workspace }}/.cicd/odoo/dockerfile/requirements.txt
     ODOO_DOCKER_COMPOSE_PATH: ${{ github.workspace }}/.cicd/odoo
     ODOO_TEST_DATABASE_NAME: testing_db
     LOG_FILE: /var/log/odoo/odoo.log
@@ -23,12 +25,13 @@ env:
     PR_URL: ${{ github.event.pull_request.html_url }}
 
 jobs:
+    # TODO: integrate with Sonarqube
     pylint-test:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: Update config file before running pylint tests
+            - name: Prepare data for containers
               run: |
                   bash $PIPELINE_SCRIPTS_PATH/build.sh "pylint"
             - uses: isbang/compose-action@v1.5.1
@@ -45,7 +48,7 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: Update config file before running unit tests
+            - name: Prepare data for containers
               run: |
                   bash $PIPELINE_SCRIPTS_PATH/build.sh "unit_test" "at_install"
                   cat $CONFIG_FILE
@@ -64,7 +67,7 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: Update config file before running unit tests
+            - name: Prepare data for containers
               run: |
                   bash $PIPELINE_SCRIPTS_PATH/build.sh "unit_test" "post_install"
                   cat $CONFIG_FILE
@@ -77,10 +80,20 @@ jobs:
               run: |
                   bash $PIPELINE_SCRIPTS_PATH/unit-test.sh
 
-    Deploy-server:
+    # TODO: integrationtest and deploy server
+    integration-test:
         runs-on: ubuntu-latest
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
         needs: [pylint-test, unit-test-post-install]
+        steps:
+            - name: "Integration test"
+              run: |
+                  echo "Integration test"
+
+    deploy-server:
+        runs-on: ubuntu-latest
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        needs: [integration-test]
         steps:
             - run: |
                   echo "Deploy to server here"

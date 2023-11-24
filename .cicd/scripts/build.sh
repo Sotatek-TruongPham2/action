@@ -72,16 +72,11 @@ function update_config_file {
     fi
 }
 
-function start_containers {
-    default_container_requirements="$ODOO_WORKSPACE/dockerfile/requirements.txt"
-    custom_addons_requirements="$ODOO_CUSTOM_ADDONS_PATH/requirements.txt"
-    if [ -e "$custom_addons_requirements" ] && [ -e "$default_container_requirements" ]; then
-        echo "" >>$default_container_requirements
-        cat "$custom_addons_requirements" >>$default_container_requirements
+function copy_requirements_txt_file {
+    if [[ -f "$SOURCE_REQUIREMENTS_FILE" ]]; then
+        echo "" >>$DOCKER_REQUIREMENTS_FILE
+        cat $SOURCE_REQUIREMENTS_FILE >>$DOCKER_REQUIREMENTS_FILE
     fi
-    docker_compose build --pull --quiet
-    docker_compose up -d --wait --no-color
-    docker_compose ps
 }
 
 show_build_message() {
@@ -97,6 +92,7 @@ function main {
     show_build_message
     set_list_addons
     update_config_file
+    copy_requirements_txt_file
 }
 
 main "$@"
