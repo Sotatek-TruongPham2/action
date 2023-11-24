@@ -28,9 +28,7 @@ function set_list_addons {
 
     ignore_demo_data_addons=$(get_list_addons_ignore_demo_data "$ODOO_CUSTOM_ADDONS_PATH")
     declare -g without_demo_addons=
-    if [[ -z $ignore_demo_data_addons ]]; then
-        without_demo_addons=all
-    else
+    if [[ -n $ignore_demo_data_addons ]]; then
         without_demo_addons=$ignore_demo_data_addons
     fi
 }
@@ -48,7 +46,7 @@ function update_config_file {
     --workers 0 \
     --database $ODOO_TEST_DATABASE_NAME \
     --logfile "$LOG_FILE" \
-    --log-level info " >>$CONFIG_FILE
+    --log-level error " >>$CONFIG_FILE
 
     if [[ -n $test_pylint ]]; then
         test_tags="/test_lint"
@@ -62,22 +60,23 @@ function update_config_file {
         else
             test_tags="${tagged_custom_addons}"
         fi
-        echo -en " --init ${custom_addons} \
-        --without-demo $without_demo_addons \
-        --test-tags $test_tags\n" >>$CONFIG_FILE
+        if [[ -z $without_demo_addons ]]; then
+            echo -en " --init ${custom_addons} \
+            --test-tags $test_tags\n" >>$CONFIG_FILE
+        else
+            echo -en " --init ${custom_addons} \
+            --without-demo $without_demo_addons \
+            --test-tags $test_tags\n" >>$CONFIG_FILE
+        fi
+
     fi
 }
 
-function start_containers {
-    default_container_requirements="$ODOO_WORKSPACE/dockerfile/requirements.txt"
-    custom_addons_requirements="$ODOO_CUSTOM_ADDONS_PATH/requirements.txt"
-    if [ -e "$custom_addons_requirements" ] && [ -e "$default_container_requirements" ]; then
-        echo "" >>$default_container_requirements
-        cat "$custom_addons_requirements" >>$default_container_requirements
+function copy_requirements_txt_file {
+    if [[ -f "$SOURCE_REQUIREMENTS_FILE" ]]; then
+        echo "" >>$DOCKER_REQUIREMENTS_FILE
+        cat $SOURCE_REQUIREMENTS_FILE >>$DOCKER_REQUIREMENTS_FILE
     fi
-    docker_compose build --pull --quiet
-    docker_compose up -d --wait --no-color
-    docker_compose ps
 }
 
 show_build_message() {
@@ -93,6 +92,7 @@ function main {
     show_build_message
     set_list_addons
     update_config_file
+    copy_requirements_txt_file
 }
 
 main "$@"

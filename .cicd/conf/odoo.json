@@ -1,12 +1,7 @@
 {
     "addons": {
         "report_py3o": {
-            "ignore_test": true
-        },
-        "scs_approval": {
-            "ignore_demo": true
-        },
-        "sh_activity_base": {
+            "ignore_test": true,
             "ignore_demo": true
         }
     }

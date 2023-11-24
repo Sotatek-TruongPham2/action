@@ -17,8 +17,16 @@ function analyze_log {
     grep -m 1 -P '^[0-9-\s:,]+(ERROR|CRITICAL)' $LOG_FILE_OUTSIDE >/dev/null 2>&1
     error_exist=$?
     if [ $error_exist -eq 0 ]; then
-        exit 1
+        message=$(
+            cat <<EOF
+🐞The [PR \\#$PR_NUMBER]($PR_URL) check has failed\\!🐞
+Please take a look at the attached log file🔬
+EOF
+        )
+        send_file_telegram "$TELEGRAM_TOKEN" "$TELEGRAM_CHANNEL_ID" "$LOG_FILE_OUTSIDE" "$message"
+        return 1
     fi
 }
 
+wait_until_odoo_shutdown
 analyze_log
