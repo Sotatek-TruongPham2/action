@@ -122,7 +122,7 @@ jobs:
                   port: ${{ env.SERVER_PORT }}
                   script: |
                       docker ps -a
-                      find . /tmp
+                      ls -lah /tmp
 
     # deploy-server:
     #     runs-on: ubuntu-latest
