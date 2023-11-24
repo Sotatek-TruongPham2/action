@@ -47,7 +47,7 @@ jobs:
               uses: actions/checkout@v4
             - name: Update config file before running unit tests
               run: |
-                  bash $PIPELINE_SCRIPTS_PATH/build.sh "unit_test" "at_test"
+                  bash $PIPELINE_SCRIPTS_PATH/build.sh "unit_test" "at_install"
             - uses: isbang/compose-action@v1.5.1
               with:
                   compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
@@ -64,7 +64,7 @@ jobs:
               uses: actions/checkout@v4
             - name: Update config file before running unit tests
               run: |
-                  bash $PIPELINE_SCRIPTS_PATH/build.sh "unit_test" "post_test"
+                  bash $PIPELINE_SCRIPTS_PATH/build.sh "unit_test" "post_install"
             - uses: isbang/compose-action@v1.5.1
               with:
                   compose-file: ${{ github.workspace }}/.cicd/odoo/docker-compose.yml
@@ -74,7 +74,7 @@ jobs:
     Deploy-server:
         runs-on: ubuntu-latest
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
-        needs: [pylint-test, unit-test-at-install]
+        needs: [pylint-test, unit-test-at-install, unit-test-post-install]
         steps:
             - run: |
                   echo "ok deploy me bro"

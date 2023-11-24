@@ -10,7 +10,8 @@ function analyze_log {
     if [ $? -ne 0 ]; then
         return 0
     fi
-    send_file_telegram "$TELEGRAM_TOKEN" "$TELEGRAM_CHANNEL_ID" "$LOG_FILE_OUTSIDE" "The pylint test result for [PR \\#$PR_NUMBER]($PR_URL)"
+
+    send_file_telegram "$TELEGRAM_TOKEN" "$TELEGRAM_CHANNEL_ID" "$LOG_FILE_OUTSIDE" "🐞The pylint test result for [PR \\#$PR_NUMBER]($PR_URL)🐞"
 }
 
 wait_until_odoo_shutdown
