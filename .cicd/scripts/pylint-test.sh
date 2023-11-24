@@ -11,7 +11,13 @@ function analyze_log {
         return 0
     fi
 
-    send_file_telegram "$TELEGRAM_TOKEN" "$TELEGRAM_CHANNEL_ID" "$LOG_FILE_OUTSIDE" "🐞The pylint test result for [PR \\#$PR_NUMBER]($PR_URL)🐞"
+    grep -m 1 -P '^[0-9-\s:,]+(ERROR|CRITICAL)' $LOG_FILE_OUTSIDE >/dev/null 2>&1
+    error_exist=$?
+    if [ $error_exist -eq 0 ]; then
+        message="🐞The pylint test result for [PR \\#$PR_NUMBER]($PR_URL)🐞"
+        send_file_telegram "$TELEGRAM_TOKEN" "$TELEGRAM_CHANNEL_ID" "$LOG_FILE_OUTSIDE" "$message"
+        return 1
+    fi
 }
 
 wait_until_odoo_shutdown

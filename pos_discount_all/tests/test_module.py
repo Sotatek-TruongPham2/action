@@ -49,7 +49,7 @@ class TestUi(TestPointOfSaleHttpCommon):
         self.env["product.product"].create(
             {
                 "name": "Discount Product",
-                "is_discount_": True,
+                "is_discount": True,
                 "available_in_pos": True,
                 "list_price": -1.0,
                 "taxes_id": False,
