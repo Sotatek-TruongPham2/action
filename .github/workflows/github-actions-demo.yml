@@ -107,8 +107,10 @@ jobs:
                   username: ${{ env.SERVER_USER }}
                   password: ${{ env.SERVER_PASSWORD }}
                   port: ${{ env.SERVER_PORT }}
+                  timeout: 5m
                   source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
-                  target: ${{ env.SERVER_BACKUP_SCRIPT }}
+                  target: /tmp/odoo-cicd/server-backup
+                  #   target: ${{ env.SERVER_BACKUP_SCRIPT }}
 
             # - name: "Integration test"
             #   uses: appleboy/ssh-action@v1.0.0
