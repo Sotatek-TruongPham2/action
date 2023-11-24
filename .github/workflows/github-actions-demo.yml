@@ -110,7 +110,7 @@ jobs:
                   timeout: 5m
                   #   source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
                   source: ${{ github.workspace }}/.cicd/scripts/server-backup.sh
-                  target: /tmp/odoo-cicd/server-backup
+                  target: /tmp
                   #   target: ${{ env.SERVER_BACKUP_SCRIPT }}
 
             # - name: "Integration test"
