@@ -94,10 +94,22 @@ jobs:
     # TODO: integrationtest and deploy server
     integration-test:
         runs-on: ubuntu-latest
+        env:
+            SERVER_BACKUP_SCRIPT: /tmp/odoo-cicd/server-backup
         #fixme: uncomment needs
         # if: github.event.action == 'closed' && github.event.pull_request.merged == true
         # needs: [pylint-test, unit-test-at-install, unit-test-post-install]
         steps:
+            - name: "Copy backup script file"
+              uses: appleboy/scp-action@v0.1.4
+              with:
+                  host: ${{ env.SERVER_HOST }}
+                  username: ${{ env.SERVER_USER }}
+                  password: ${{ env.SERVER_PASSWORD }}
+                  port: ${{ env.SERVER_PORT }}
+                  source: ${{ env.PIPELINE_SCRIPTS_PATH }}/server-backup.sh
+                  target: ${{ env.SERVER_BACKUP_SCRIPT }}
+
             - name: "Integration test"
               uses: appleboy/ssh-action@v1.0.0
               with:
@@ -107,6 +119,7 @@ jobs:
                   port: ${{ env.SERVER_PORT }}
                   script: |
                       docker ps -a
+                      find . /tmp
 
     # deploy-server:
     #     runs-on: ubuntu-latest
