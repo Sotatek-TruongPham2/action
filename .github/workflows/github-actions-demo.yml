@@ -19,10 +19,22 @@ env:
     LOG_FILE: /var/log/odoo/odoo.log
     LOG_FILE_OUTSIDE: ${{ github.workspace }}/.cicd/odoo/logs/odoo.log
     ODOO_TMP_BACKUP_FOLDER: ${{ github.workspace }}/.cicd/.tmp/server-backup
+
     TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
     TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
     PR_NUMBER: ${{ github.event.pull_request.number }}
     PR_URL: ${{ github.event.pull_request.html_url }}
+
+    SERVER_HOST: ${{ secrets.SERVER_HOST }}
+    SERVER_USER: ${{ secrets.SERVER_USER }}
+    SERVER_PORT: ${{ secrets.SERVER_PORT }}
+    SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+    SERVER_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
+
+    SEVER_DEPLOY_PATH: ${{ vars.SEVER_DEPLOY_PATH }}
+    SERVER_ODOO_URL: ${{ vars.SERVER_ODOO_URL }}
+    SERVER_ODOO_DB_NAME: ${{ vars.SERVER_ODOO_DB_NAME }}
+    SERVER_ODOO_IMAGE_TAG: ${{ vars.SERVER_ODOO_IMAGE_TAG }}
 
 jobs:
     # TODO: integrate with Sonarqube
@@ -63,7 +75,6 @@ jobs:
 
     unit-test-post-install:
         runs-on: ubuntu-latest
-        needs: [unit-test-at-install]
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -84,16 +95,29 @@ jobs:
     integration-test:
         runs-on: ubuntu-latest
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
-        needs: [pylint-test, unit-test-post-install]
+        needs: [pylint-test, unit-test-at-install, unit-test-post-install]
         steps:
             - name: "Integration test"
-              run: |
-                  echo "Integration test"
+              uses: appleboy/ssh-action@v1.0.0
+              with:
+                  host: ${{ env.SERVER_HOST }}
+                  username: ${{ env.SERVER_USER }}
+                  password: ${{ env.SERVER_PASSWORD }}
+                  port: ${{ env.SERVER_PORT }}
+                  script: |
+                      ls -lah /
+                      docker ps -a
 
     deploy-server:
         runs-on: ubuntu-latest
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
         needs: [integration-test]
         steps:
-            - run: |
-                  echo "Deploy to server here"
+            - name: Use variables
+              run: |
+                  echo "repository variable : $REPOSITORY_VAR"
+                  echo "organization variable : $ORGANIZATION_VAR"
+                  echo "overridden variable : $OVERRIDE_VAR"
+                  echo "variable from shell environment : $env_var"
+              env:
+                  ab: 1
